@@ -80,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
     togglebox: {
         marginRight: theme.spacing(1)
     },
-    searchbox:{
-        marginTop:theme.spacing(4)
+    searchbox: {
+        marginTop: theme.spacing(4)
     }
 }))
 
@@ -97,7 +97,7 @@ const Home = () => {
     const [selectedSt, setSelectedSt] = useState(null);
     const [selectedDis, setSelectedDis] = useState(null);
     const [value, setValue] = useState(0);
-   
+
 
 
     const handleChange2 = (event, newValue) => {
