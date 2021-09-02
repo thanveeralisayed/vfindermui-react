@@ -311,7 +311,7 @@ const Home = () => {
 
                 {
                     centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
-                        <Paper elevation={5} className={classes.centersPaper}>
+                        <Paper elevation={0} className={classes.centersPaper}>
                             {<Centers centers={centers} />}
                         </Paper>
                     </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
