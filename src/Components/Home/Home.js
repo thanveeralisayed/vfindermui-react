@@ -190,7 +190,7 @@ const Home = () => {
                     <Paper elevation={0} className={classes.paper}>
 
                         <Box display="flex" justifyContent="center">
-                            <Paper  square>
+                            <Paper elevation={0}  square>
                                 <Tabs
                                     value={value}
                                     indicatorColor="primary"
@@ -314,7 +314,7 @@ const Home = () => {
                         <Paper elevation={5} className={classes.centersPaper}>
                             {<Centers centers={centers} />}
                         </Paper>
-                    </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found in your PIN</Typography> : null
+                    </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
                 }
 
 
