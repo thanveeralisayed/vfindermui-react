@@ -120,6 +120,7 @@ const Home = () => {
         setSelectedDis(null);
         setPincode(null);
         setCenters(null);
+        setDistricts(null);
         setDistrictId(null);
         setState({ ...state, [event.target.name]: event.target.checked });
     };
