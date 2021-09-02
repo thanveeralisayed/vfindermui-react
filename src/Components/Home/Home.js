@@ -190,7 +190,7 @@ const Home = () => {
                     <Paper elevation={0} className={classes.paper}>
 
                         <Box display="flex" justifyContent="center">
-                            <Paper square>
+                            <Paper  square>
                                 <Tabs
                                     value={value}
                                     indicatorColor="primary"
