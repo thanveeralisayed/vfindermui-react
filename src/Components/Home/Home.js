@@ -9,6 +9,9 @@ import format from 'date-fns/format/index';
 import Switch from '@material-ui/core/Switch';
 import { Box } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 
 
@@ -77,6 +80,9 @@ const useStyles = makeStyles((theme) => ({
     },
     togglebox: {
         marginRight: theme.spacing(1)
+    },
+    searchbox:{
+        marginTop:theme.spacing(4)
     }
 }))
 
@@ -91,10 +97,22 @@ const Home = () => {
     const [districtId, setDistrictId] = useState(null);
     const [selectedSt, setSelectedSt] = useState(null);
     const [selectedDis, setSelectedDis] = useState(null);
-    const [state, setState] = useState({
-        pin: true,
-        district: true,
-    });
+    const [value, setValue] = useState(0);
+   
+
+
+    const handleChange2 = (event, newValue) => {
+        setSelectedSt(null);
+        setSelectedDis(null);
+        setPincode(null);
+        setCenters(null);
+        setDistricts(null);
+        setDistrictId(null);
+        setValue(newValue);
+        console.log(value);
+    };
+
+
 
 
 
@@ -115,15 +133,7 @@ const Home = () => {
     };
 
 
-    const handleChange = (event) => {
-        setSelectedSt(null);
-        setSelectedDis(null);
-        setPincode(null);
-        setCenters(null);
-        setDistricts(null);
-        setDistrictId(null);
-        setState({ ...state, [event.target.name]: event.target.checked });
-    };
+
 
 
     const fetchStates = () => {
@@ -180,32 +190,30 @@ const Home = () => {
 
                     <Paper elevation={11} className={classes.paper}>
 
-                        <Box className={classes.togglebox} display="flex" flexDirection="row-reverse">
-
-
-                            <FormControlLabel
-                                label={state.pin ? 'Pin' : 'District'}
-                                labelPlacement="bottom"
-                                control={
-                                    <Switch
-                                        checked={state.pin}
-                                        onChange={handleChange}
-                                        color="primary"
-                                        name="pin"
-                                        inputProps={{ 'aria-label': 'primary checkbox' }}
-
-                                    />
-                                }
-
-                            />
-
+                        <Box display="flex" justifyContent="center">
+                            <Paper square>
+                                <Tabs
+                                    value={value}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    onChange={handleChange2}
+                                    aria-label="disabled tabs example"
+                                >
+                                    <Tab label="PIN" />
+                                    <Tab label="DISTRICT" />
+                                </Tabs>
+                            </Paper>
                         </Box>
 
 
-                        <Box display="flex" justifyContent="center">
+
+
+
+
+                        <Box className={classes.searchbox} display="flex" justifyContent="center">
 
                             {
-                                state.pin ? <div className={classes.search}>
+                                value === 0 ? <div className={classes.search}>
                                     <div className={classes.searchIcon}>
                                         <Search />
                                     </div>
@@ -223,7 +231,7 @@ const Home = () => {
                                     />
                                 </div> : <Box display="flex" justifyContent="center">
                                     <div>
-                                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickstate}>
+                                        <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickstate}>
                                             {selectedSt ? selectedSt : 'Select State'}
                                         </Button>
                                         <Menu
@@ -251,7 +259,7 @@ const Home = () => {
                                     </div>
 
                                     <div>
-                                        <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickdis}>
+                                        <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickdis}>
                                             {selectedDis ? selectedDis : 'Select District'}
                                         </Button>
                                         <Menu
