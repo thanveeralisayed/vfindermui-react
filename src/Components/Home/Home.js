@@ -187,7 +187,7 @@ const Home = () => {
                 <Grid xs={12} item>
 
 
-                    <Paper elevation={11} className={classes.paper}>
+                    <Paper elevation={0} className={classes.paper}>
 
                         <Box display="flex" justifyContent="center">
                             <Paper square>
