@@ -6,12 +6,11 @@ import { Search } from '@material-ui/icons';
 import Centers from '../Centers/Centers';
 import axios from 'axios';
 import format from 'date-fns/format/index';
-import Switch from '@material-ui/core/Switch';
 import { Box } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+
 
 
 
