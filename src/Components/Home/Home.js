@@ -16,13 +16,14 @@ import Tab from '@material-ui/core/Tab';
 
 
 
+
 const useStyles = makeStyles((theme) => ({
     root: {
         marginTop: theme.spacing(5)
     },
     paper: {
         padding: theme.spacing(2),
-        textAlign: 'center',
+        textAlign: 'center'
     },
     search: {
         position: 'relative',
@@ -97,6 +98,7 @@ const Home = () => {
     const [selectedSt, setSelectedSt] = useState(null);
     const [selectedDis, setSelectedDis] = useState(null);
     const [value, setValue] = useState(0);
+   
 
 
 
@@ -181,145 +183,145 @@ const Home = () => {
 
 
     return (
-        <Container>
+            <Container>
 
-            <Grid className={classes.root} container>
-                <Grid xs={12} item>
+                <Grid className={classes.root} container>
+                    <Grid xs={12} item>
 
 
-                    <Paper elevation={0} className={classes.paper}>
+                        <Paper elevation={0} className={classes.paper}>
 
-                        <Box display="flex" justifyContent="center">
-                            <Paper elevation={0}  square>
-                                <Tabs
-                                    value={value}
-                                    indicatorColor="primary"
-                                    textColor="primary"
-                                    onChange={handleChange2}
-                                    aria-label="disabled tabs example"
-                                >
-                                    <Tab label="PIN" />
-                                    <Tab label="DISTRICT" />
-                                </Tabs>
+                            <Box display="flex" justifyContent="center">
+                                <Paper elevation={0} square>
+                                    <Tabs
+                                        value={value}
+                                        indicatorColor="primary"
+                                        textColor="primary"
+                                        onChange={handleChange2}
+                                        aria-label="disabled tabs example"
+                                    >
+                                        <Tab label="PIN" />
+                                        <Tab label="DISTRICT" />
+                                    </Tabs>
+                                </Paper>
+                            </Box>
+
+
+
+
+
+
+                            <Box className={classes.searchbox} display="flex" justifyContent="center">
+
+                                {
+                                    value === 0 ? <div className={classes.search}>
+                                        <div className={classes.searchIcon}>
+                                            <Search />
+                                        </div>
+                                        <InputBase
+                                            className={classes.ipfield}
+                                            onKeyDown={(e) => e.key === 'Enter' ? OnSearchHandler() : null}
+                                            onChange={(e) => setPincode(e.target.value)}
+                                            placeholder="Enter your PIN"
+                                            classes={{
+                                                root: classes.inputRoot,
+                                                input: classes.inputInput,
+                                            }}
+                                            inputProps={{ 'aria-label': 'search' }}
+                                            type="number"
+                                        />
+                                    </div> : <Box display="flex" justifyContent="center">
+                                        <div>
+                                            <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickstate}>
+                                                {selectedSt ? selectedSt : 'Select State'}
+                                            </Button>
+                                            <Menu
+                                                id="simple-menu"
+                                                anchorEl={anchorElst}
+                                                keepMounted
+                                                open={Boolean(anchorElst)}
+                                                onClose={handleClosestate}
+                                            >
+
+                                                {
+                                                    states ? states.map((state, index) => (
+                                                        <MenuItem key={index} onClick={() => {
+                                                            handleClosestate();
+                                                            fetchDistricts(state.state_id);
+                                                            setSelectedSt(state.state_name);
+                                                            setSelectedDis(null);
+                                                            setDistrictId(null);
+                                                        }}>{state.state_name}</MenuItem>
+                                                    )) : null
+                                                }
+
+
+                                            </Menu>
+                                        </div>
+
+                                        <div>
+                                            <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickdis}>
+                                                {selectedDis ? selectedDis : 'Select District'}
+                                            </Button>
+                                            <Menu
+                                                id="simple-menu"
+                                                anchorEl={anchorElds}
+                                                keepMounted
+                                                open={Boolean(anchorElds)}
+                                                onClose={handleClosedis}
+                                            >
+
+                                                {
+                                                    districts ? districts.map((district, index) => (
+                                                        <MenuItem key={index} onClick={() => {
+                                                            handleClosedis();
+                                                            setDistrictId(district.district_id);
+                                                            setSelectedDis(district.district_name);
+
+                                                        }}>{district.district_name}</MenuItem>
+                                                    )) : <MenuItem>Select a state</MenuItem>
+                                                }
+                                            </Menu>
+                                        </div>
+
+                                    </Box>
+
+
+                                }
+
+
+
+
+                            </Box>
+
+
+
+                            <Button onClick={() => OnSearchHandler(districtId)} size="large" className={classes.searchButton} variant="outlined" color="secondary">
+                                Search
+                            </Button>
+
+                        </Paper>
+
+
+
+
+
+
+                    </Grid>
+
+
+
+                    {
+                        centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
+                            <Paper elevation={0} className={classes.centersPaper}>
+                                {<Centers centers={centers} />}
                             </Paper>
-                        </Box>
-
-
-
-
-
-
-                        <Box className={classes.searchbox} display="flex" justifyContent="center">
-
-                            {
-                                value === 0 ? <div className={classes.search}>
-                                    <div className={classes.searchIcon}>
-                                        <Search />
-                                    </div>
-                                    <InputBase
-                                        className={classes.ipfield}
-                                        onKeyDown={(e) => e.key === 'Enter' ? OnSearchHandler() : null}
-                                        onChange={(e) => setPincode(e.target.value)}
-                                        placeholder="Enter your PIN"
-                                        classes={{
-                                            root: classes.inputRoot,
-                                            input: classes.inputInput,
-                                        }}
-                                        inputProps={{ 'aria-label': 'search' }}
-                                        type="number"
-                                    />
-                                </div> : <Box display="flex" justifyContent="center">
-                                    <div>
-                                        <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickstate}>
-                                            {selectedSt ? selectedSt : 'Select State'}
-                                        </Button>
-                                        <Menu
-                                            id="simple-menu"
-                                            anchorEl={anchorElst}
-                                            keepMounted
-                                            open={Boolean(anchorElst)}
-                                            onClose={handleClosestate}
-                                        >
-
-                                            {
-                                                states ? states.map((state, index) => (
-                                                    <MenuItem key={index} onClick={() => {
-                                                        handleClosestate();
-                                                        fetchDistricts(state.state_id);
-                                                        setSelectedSt(state.state_name);
-                                                        setSelectedDis(null);
-                                                        setDistrictId(null);
-                                                    }}>{state.state_name}</MenuItem>
-                                                )) : null
-                                            }
-
-
-                                        </Menu>
-                                    </div>
-
-                                    <div>
-                                        <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickdis}>
-                                            {selectedDis ? selectedDis : 'Select District'}
-                                        </Button>
-                                        <Menu
-                                            id="simple-menu"
-                                            anchorEl={anchorElds}
-                                            keepMounted
-                                            open={Boolean(anchorElds)}
-                                            onClose={handleClosedis}
-                                        >
-
-                                            {
-                                                districts ? districts.map((district, index) => (
-                                                    <MenuItem key={index} onClick={() => {
-                                                        handleClosedis();
-                                                        setDistrictId(district.district_id);
-                                                        setSelectedDis(district.district_name);
-
-                                                    }}>{district.district_name}</MenuItem>
-                                                )) : <MenuItem>Select a state</MenuItem>
-                                            }
-                                        </Menu>
-                                    </div>
-
-                                </Box>
-
-
-                            }
-
-
-
-
-                        </Box>
-
-
-
-                        <Button onClick={() => OnSearchHandler(districtId)} size="large" className={classes.searchButton} variant="outlined" color="secondary">
-                            Search
-                        </Button>
-
-                    </Paper>
-
-
-
-
+                        </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
+                    }
 
 
                 </Grid>
-
-
-
-                {
-                    centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
-                        <Paper elevation={0} className={classes.centersPaper}>
-                            {<Centers centers={centers} />}
-                        </Paper>
-                    </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
-                }
-
-
-            </Grid>
-        </Container>
+            </Container>
     )
 }
 

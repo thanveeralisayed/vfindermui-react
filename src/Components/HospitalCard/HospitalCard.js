@@ -2,13 +2,14 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import { Avatar, Button, ButtonGroup, CardActions, CardContent, CardHeader, Collapse, Grid, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
-import { yellow } from '@material-ui/core/colors';
+import { yellow,green } from '@material-ui/core/colors';
 import { ExpandMoreOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import clsx from 'clsx';
 import SessionCard from '../SessionCard/SessionCard';
 import format from 'date-fns/format/index';
 import Box from '@material-ui/core/Box';
+
 
 const useStyles = makeStyles((theme) => ({
     avatar: {
@@ -64,7 +65,7 @@ const HospitalCard = ({ center }) => {
         <div>
             <Card className={classes.card} elevation={7}>
                 <CardHeader
-                    avatar={<Avatar aria-label="centers" style={feeType === "Paid" ? { backgroundColor: 'yellow' } : { backgroundColor: 'green' }}>
+                    avatar={<Avatar aria-label="centers" style={feeType === "Paid" ? { backgroundColor: `${yellow[500]}` } : { backgroundColor: `${green[500]}` }}>
                         {feeType[0]}
                     </Avatar>}
                     title={center.name}
