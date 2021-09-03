@@ -97,6 +97,9 @@ const Home = () => {
     const [districtId, setDistrictId] = useState(null);
     const [selectedSt, setSelectedSt] = useState(null);
     const [selectedDis, setSelectedDis] = useState(null);
+    const [setrpin, setSetrpin] = useState(null);
+    const [rdistrictname, setRdistrictname] = useState(null);
+    const [rstateName, setRstateName] = useState(null);
     const [value, setValue] = useState(0);
    
 
@@ -110,6 +113,7 @@ const Home = () => {
         setDistricts(null);
         setDistrictId(null);
         setValue(newValue);
+        localStorage.setItem("tabval",newValue);
         console.log(value);
     };
 
@@ -150,21 +154,50 @@ const Home = () => {
     }
 
     const fetchCentreList = (pin, date) => {
+        localStorage.removeItem("rdistrict");
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=${date}`).then(res => {
             setCenters(res.data.centers)
         })
     }
 
     const fetchCentreListbyDistrict = (id, date) => {
+        localStorage.setItem("rdistrict",id);
+        localStorage.removeItem("recentpin");
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${id}&date=${date}`).then((res) => {
             setCenters(res.data.centers);
-
         })
     }
 
     useEffect(() => {
         fetchStates();
+        if (localStorage.getItem("recentpin")) {
+            const rpin = localStorage.getItem("recentpin");
+            const date = format(new Date(), 'dd-MM-yyyy')
+            if (rpin) {
+                fetchCentreList(rpin,date);
+                setSetrpin(rpin);
+            }
+        }
+
+        if (localStorage.getItem("rdistrict")) {
+            const rdis = localStorage.getItem("rdistrict");
+            let tabval = localStorage.getItem("tabval");
+            tabval = parseInt(tabval);
+            setValue(tabval);
+            const date = format(new Date(), 'dd-MM-yyyy');
+            if (rdis) {
+                fetchCentreListbyDistrict(rdis,date);
+                const rsname = localStorage.getItem("rsname");
+                const rdname = localStorage.getItem("rdname");
+                if (rsname && rdname) {
+                    setSelectedSt(rsname);
+                    setSelectedDis(rdname);
+                }
+            }
+        }
     }, [])
+
+
 
     const OnSearchHandler = (id) => {
         setCenters(null);
@@ -172,6 +205,7 @@ const Home = () => {
         console.log(date);
         if (!id && pincode) {
             fetchCentreList(pincode, date);
+            localStorage.setItem("recentpin",pincode);
         }
         if (id) {
             fetchCentreListbyDistrict(id, date)
@@ -221,8 +255,12 @@ const Home = () => {
                                         <InputBase
                                             className={classes.ipfield}
                                             onKeyDown={(e) => e.key === 'Enter' ? OnSearchHandler() : null}
-                                            onChange={(e) => setPincode(e.target.value)}
-                                            placeholder="Enter your PIN"
+                                            onChange={(e) => {
+                                                setSetrpin(null)
+                                                setPincode(e.target.value)
+                                            }}
+                                            placeholder="Enter your PIN}"
+                                            value={setrpin !== null? setrpin :null}
                                             classes={{
                                                 root: classes.inputRoot,
                                                 input: classes.inputInput,
@@ -249,6 +287,7 @@ const Home = () => {
                                                             handleClosestate();
                                                             fetchDistricts(state.state_id);
                                                             setSelectedSt(state.state_name);
+                                                            localStorage.setItem("rsname",state.state_name);
                                                             setSelectedDis(null);
                                                             setDistrictId(null);
                                                         }}>{state.state_name}</MenuItem>
@@ -277,6 +316,7 @@ const Home = () => {
                                                             handleClosedis();
                                                             setDistrictId(district.district_id);
                                                             setSelectedDis(district.district_name);
+                                                            localStorage.setItem("rdname",district.district_name);
 
                                                         }}>{district.district_name}</MenuItem>
                                                     )) : <MenuItem>Select a state</MenuItem>

@@ -7,6 +7,7 @@ import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { blue, red } from '@material-ui/core/colors';
 import Brightness4OutlinedIcon from '@material-ui/icons/Brightness4Outlined';
 import FlareOutlinedIcon from '@material-ui/icons/FlareOutlined';
+import { alpha } from '@material-ui/core';
 
 
 
@@ -57,7 +58,7 @@ const Layout = ({ children }) => {
         },
         title: {
             flexGrow: 1,
-        },
+        }
     }));
 
     const classes = useStyles();
@@ -68,7 +69,7 @@ const Layout = ({ children }) => {
             <div>
                 <div>
                     <div className={classes.root}>
-                        <AppBar position="static">
+                        <AppBar  position="static">
                             <Toolbar>
                                 {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                                 <MenuIcon />
