@@ -98,8 +98,6 @@ const Home = () => {
     const [selectedSt, setSelectedSt] = useState(null);
     const [selectedDis, setSelectedDis] = useState(null);
     const [setrpin, setSetrpin] = useState(null);
-    const [rdistrictname, setRdistrictname] = useState(null);
-    const [rstateName, setRstateName] = useState(null);
     const [value, setValue] = useState(0);
    
 
@@ -113,8 +111,7 @@ const Home = () => {
         setDistricts(null);
         setDistrictId(null);
         setValue(newValue);
-        localStorage.setItem("tabval",newValue);
-        console.log(value);
+        
     };
 
 
@@ -148,13 +145,16 @@ const Home = () => {
     }
 
     const fetchDistricts = (id) => {
+        console.log(id);
+        localStorage.setItem("seldisId",id);
         axios.get(`https://cdn-api.co-vin.in/api/v2/admin/location/districts/${id}`).then(res => {
-            setDistricts(res.data.districts)
+            setDistricts(res.data.districts);
         })
     }
 
     const fetchCentreList = (pin, date) => {
         localStorage.removeItem("rdistrict");
+        localStorage.setItem("tabval",0);
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=${date}`).then(res => {
             setCenters(res.data.centers)
         })
@@ -163,6 +163,7 @@ const Home = () => {
     const fetchCentreListbyDistrict = (id, date) => {
         localStorage.setItem("rdistrict",id);
         localStorage.removeItem("recentpin");
+        localStorage.setItem("tabval",1);
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${id}&date=${date}`).then((res) => {
             setCenters(res.data.centers);
         })
@@ -189,9 +190,12 @@ const Home = () => {
                 fetchCentreListbyDistrict(rdis,date);
                 const rsname = localStorage.getItem("rsname");
                 const rdname = localStorage.getItem("rdname");
+                const seldisid = localStorage.getItem("seldisId");
+                console.log(rsname);
                 if (rsname && rdname) {
                     setSelectedSt(rsname);
                     setSelectedDis(rdname);
+                    fetchDistricts(seldisid);
                 }
             }
         }
