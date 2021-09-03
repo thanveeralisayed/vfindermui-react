@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
     const classes = useStyles();
-    const [pincode, setPincode] = useState(null);
+    const [pincode, setPincode] = useState('');
     const [centers, setCenters] = useState(null);
     const [states, setStates] = useState(null);
     const [districts, setDistricts] = useState(null);
@@ -97,8 +97,8 @@ const Home = () => {
     const [districtId, setDistrictId] = useState(null);
     const [selectedSt, setSelectedSt] = useState(null);
     const [selectedDis, setSelectedDis] = useState(null);
-    const [setrpin, setSetrpin] = useState(null);
     const [value, setValue] = useState(0);
+    const [coviFilter, setcoviFilter] = useState(null);
    
 
 
@@ -106,7 +106,7 @@ const Home = () => {
     const handleChange2 = (event, newValue) => {
         setSelectedSt(null);
         setSelectedDis(null);
-        setPincode(null);
+        setPincode('');
         setCenters(null);
         setDistricts(null);
         setDistrictId(null);
@@ -114,6 +114,12 @@ const Home = () => {
         
     };
 
+    console.log(centers);
+
+
+    // const filterCentreVaccines = (centre) => {
+        
+    // }
 
 
 
@@ -133,8 +139,6 @@ const Home = () => {
     const handleClosedis = () => {
         setAnchorElds(null);
     };
-
-
 
 
 
@@ -176,7 +180,7 @@ const Home = () => {
             const date = format(new Date(), 'dd-MM-yyyy')
             if (rpin) {
                 fetchCentreList(rpin,date);
-                setSetrpin(rpin);
+                setPincode(rpin);
             }
         }
 
@@ -204,10 +208,12 @@ const Home = () => {
 
 
     const OnSearchHandler = (id) => {
-        setCenters(null);
+        // setCenters(null);
+        console.log(pincode);
         const date = format(new Date(), 'dd-MM-yyyy')
         console.log(date);
         if (!id && pincode) {
+            console.log('entered pin mode');
             fetchCentreList(pincode, date);
             localStorage.setItem("recentpin",pincode);
         }
@@ -260,11 +266,10 @@ const Home = () => {
                                             className={classes.ipfield}
                                             onKeyDown={(e) => e.key === 'Enter' ? OnSearchHandler() : null}
                                             onChange={(e) => {
-                                                setSetrpin(null)
                                                 setPincode(e.target.value)
                                             }}
                                             placeholder="Enter your PIN}"
-                                            value={setrpin !== null? setrpin :null}
+                                            value={pincode}
                                             classes={{
                                                 root: classes.inputRoot,
                                                 input: classes.inputInput,
