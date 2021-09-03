@@ -83,6 +83,9 @@ const useStyles = makeStyles((theme) => ({
     },
     searchbox: {
         marginTop: theme.spacing(4)
+    },
+    filternames: {
+        marginTop: theme.spacing(2)
     }
 }))
 
@@ -99,7 +102,9 @@ const Home = () => {
     const [selectedDis, setSelectedDis] = useState(null);
     const [value, setValue] = useState(0);
     const [coviFilter, setcoviFilter] = useState(null);
-   
+    const [covacFilter, setCovacFilter] = useState(null);
+    const [sputFilter, setSputFilter] = useState(null);
+
 
 
 
@@ -111,16 +116,54 @@ const Home = () => {
         setDistricts(null);
         setDistrictId(null);
         setValue(newValue);
-        
+
     };
 
-    console.log(centers);
+    function getUnique(arr) {
+
+        // removing duplicate
+        let uniqueArr = [...new Set(arr)];
+        return uniqueArr;
+    }
 
 
-    // const filterCentreVaccines = (centre) => {
-        
-    // }
+    const filterCentreVaccines = (centerss) => {
+        let covi = [];
+        let covac = [];
+        let sput = [];
 
+
+        centerss.map((center) => {
+            center.sessions.map((session) => {
+                if (session.vaccine === 'COVISHIELD') {
+                    covi.push(center);
+                }
+                if (session.vaccine === 'COVAXIN') {
+                    covac.push(center);
+                }
+                if (session.vaccine === 'SPUTNIK V') {
+                    sput.push(center)
+                }
+            })
+        })
+
+
+        covi = getUnique(covi);
+        covac = getUnique(covac);
+        sput = getUnique(sput)
+
+
+        setcoviFilter(covi);
+        setCovacFilter(covac);
+        setSputFilter(sput);
+    }
+
+
+    useEffect(() => {
+        console.log(coviFilter);
+        console.log(covacFilter);
+        console.log(sputFilter);
+    }, [sputFilter])
 
 
 
@@ -150,7 +193,7 @@ const Home = () => {
 
     const fetchDistricts = (id) => {
         console.log(id);
-        localStorage.setItem("seldisId",id);
+        localStorage.setItem("seldisId", id);
         axios.get(`https://cdn-api.co-vin.in/api/v2/admin/location/districts/${id}`).then(res => {
             setDistricts(res.data.districts);
         })
@@ -158,18 +201,20 @@ const Home = () => {
 
     const fetchCentreList = (pin, date) => {
         localStorage.removeItem("rdistrict");
-        localStorage.setItem("tabval",0);
+        localStorage.setItem("tabval", 0);
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=${date}`).then(res => {
-            setCenters(res.data.centers)
+            setCenters(res.data.centers);
+            filterCentreVaccines(res.data.centers);
         })
     }
 
     const fetchCentreListbyDistrict = (id, date) => {
-        localStorage.setItem("rdistrict",id);
+        localStorage.setItem("rdistrict", id);
         localStorage.removeItem("recentpin");
-        localStorage.setItem("tabval",1);
+        localStorage.setItem("tabval", 1);
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${id}&date=${date}`).then((res) => {
             setCenters(res.data.centers);
+            filterCentreVaccines(res.data.centers);
         })
     }
 
@@ -179,7 +224,7 @@ const Home = () => {
             const rpin = localStorage.getItem("recentpin");
             const date = format(new Date(), 'dd-MM-yyyy')
             if (rpin) {
-                fetchCentreList(rpin,date);
+                fetchCentreList(rpin, date);
                 setPincode(rpin);
             }
         }
@@ -191,7 +236,7 @@ const Home = () => {
             setValue(tabval);
             const date = format(new Date(), 'dd-MM-yyyy');
             if (rdis) {
-                fetchCentreListbyDistrict(rdis,date);
+                fetchCentreListbyDistrict(rdis, date);
                 const rsname = localStorage.getItem("rsname");
                 const rdname = localStorage.getItem("rdname");
                 const seldisid = localStorage.getItem("seldisId");
@@ -215,7 +260,7 @@ const Home = () => {
         if (!id && pincode) {
             console.log('entered pin mode');
             fetchCentreList(pincode, date);
-            localStorage.setItem("recentpin",pincode);
+            localStorage.setItem("recentpin", pincode);
         }
         if (id) {
             fetchCentreListbyDistrict(id, date)
@@ -227,150 +272,172 @@ const Home = () => {
 
 
     return (
-            <Container>
+        <Container>
 
-                <Grid className={classes.root} container>
-                    <Grid xs={12} item>
-
-
-                        <Paper elevation={0} className={classes.paper}>
-
-                            <Box display="flex" justifyContent="center">
-                                <Paper elevation={0} square>
-                                    <Tabs
-                                        value={value}
-                                        indicatorColor="primary"
-                                        textColor="primary"
-                                        onChange={handleChange2}
-                                        aria-label="disabled tabs example"
-                                    >
-                                        <Tab label="PIN" />
-                                        <Tab label="DISTRICT" />
-                                    </Tabs>
-                                </Paper>
-                            </Box>
+            <Grid className={classes.root} container>
+                <Grid xs={12} item>
 
 
+                    <Paper elevation={0} className={classes.paper}>
 
-
-
-
-                            <Box className={classes.searchbox} display="flex" justifyContent="center">
-
-                                {
-                                    value === 0 ? <div className={classes.search}>
-                                        <div className={classes.searchIcon}>
-                                            <Search />
-                                        </div>
-                                        <InputBase
-                                            className={classes.ipfield}
-                                            onKeyDown={(e) => e.key === 'Enter' ? OnSearchHandler() : null}
-                                            onChange={(e) => {
-                                                setPincode(e.target.value)
-                                            }}
-                                            placeholder="Enter your PIN}"
-                                            value={pincode}
-                                            classes={{
-                                                root: classes.inputRoot,
-                                                input: classes.inputInput,
-                                            }}
-                                            inputProps={{ 'aria-label': 'search' }}
-                                            type="number"
-                                        />
-                                    </div> : <Box display="flex" justifyContent="center">
-                                        <div>
-                                            <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickstate}>
-                                                {selectedSt ? selectedSt : 'Select State'}
-                                            </Button>
-                                            <Menu
-                                                id="simple-menu"
-                                                anchorEl={anchorElst}
-                                                keepMounted
-                                                open={Boolean(anchorElst)}
-                                                onClose={handleClosestate}
-                                            >
-
-                                                {
-                                                    states ? states.map((state, index) => (
-                                                        <MenuItem key={index} onClick={() => {
-                                                            handleClosestate();
-                                                            fetchDistricts(state.state_id);
-                                                            setSelectedSt(state.state_name);
-                                                            localStorage.setItem("rsname",state.state_name);
-                                                            setSelectedDis(null);
-                                                            setDistrictId(null);
-                                                        }}>{state.state_name}</MenuItem>
-                                                    )) : null
-                                                }
-
-
-                                            </Menu>
-                                        </div>
-
-                                        <div>
-                                            <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickdis}>
-                                                {selectedDis ? selectedDis : 'Select District'}
-                                            </Button>
-                                            <Menu
-                                                id="simple-menu"
-                                                anchorEl={anchorElds}
-                                                keepMounted
-                                                open={Boolean(anchorElds)}
-                                                onClose={handleClosedis}
-                                            >
-
-                                                {
-                                                    districts ? districts.map((district, index) => (
-                                                        <MenuItem key={index} onClick={() => {
-                                                            handleClosedis();
-                                                            setDistrictId(district.district_id);
-                                                            setSelectedDis(district.district_name);
-                                                            localStorage.setItem("rdname",district.district_name);
-
-                                                        }}>{district.district_name}</MenuItem>
-                                                    )) : <MenuItem>Select a state</MenuItem>
-                                                }
-                                            </Menu>
-                                        </div>
-
-                                    </Box>
-
-
-                                }
-
-
-
-
-                            </Box>
-
-
-
-                            <Button onClick={() => OnSearchHandler(districtId)} size="large" className={classes.searchButton} variant="outlined" color="secondary">
-                                Search
-                            </Button>
-
-                        </Paper>
-
-
-
-
-
-
-                    </Grid>
-
-
-
-                    {
-                        centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
-                            <Paper elevation={0} className={classes.centersPaper}>
-                                {<Centers centers={centers} />}
+                        <Box display="flex" justifyContent="center" >
+                            <Paper elevation={0} square>
+                                <Tabs
+                                    value={value}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    onChange={handleChange2}
+                                    aria-label="disabled tabs example"
+                                >
+                                    <Tab label="PIN" />
+                                    <Tab label="DISTRICT" />
+                                </Tabs>
                             </Paper>
-                        </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
-                    }
+                        </Box>
+
+
+
+
+
+
+                        <Box className={classes.searchbox} display="flex" justifyContent="center">
+
+                            {
+                                value === 0 ? <div className={classes.search}>
+                                    <div className={classes.searchIcon}>
+                                        <Search />
+                                    </div>
+                                    <InputBase
+                                        className={classes.ipfield}
+                                        onKeyDown={(e) => e.key === 'Enter' ? OnSearchHandler() : null}
+                                        onChange={(e) => {
+                                            setPincode(e.target.value)
+                                        }}
+                                        placeholder="Enter your PIN}"
+                                        value={pincode}
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                        inputProps={{ 'aria-label': 'search' }}
+                                        type="number"
+                                    />
+                                </div> : <Box display="flex" justifyContent="center">
+                                    <div>
+                                        <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickstate}>
+                                            {selectedSt ? selectedSt : 'Select State'}
+                                        </Button>
+                                        <Menu
+                                            id="simple-menu"
+                                            anchorEl={anchorElst}
+                                            keepMounted
+                                            open={Boolean(anchorElst)}
+                                            onClose={handleClosestate}
+                                        >
+
+                                            {
+                                                states ? states.map((state, index) => (
+                                                    <MenuItem key={index} onClick={() => {
+                                                        handleClosestate();
+                                                        fetchDistricts(state.state_id);
+                                                        setSelectedSt(state.state_name);
+                                                        localStorage.setItem("rsname", state.state_name);
+                                                        setSelectedDis(null);
+                                                        setDistrictId(null);
+                                                    }}>{state.state_name}</MenuItem>
+                                                )) : null
+                                            }
+
+
+                                        </Menu>
+                                    </div>
+
+                                    <div>
+                                        <Button endIcon={<KeyboardArrowDownIcon />} aria-controls="simple-menu" aria-haspopup="true" onClick={handleClickdis}>
+                                            {selectedDis ? selectedDis : 'Select District'}
+                                        </Button>
+                                        <Menu
+                                            id="simple-menu"
+                                            anchorEl={anchorElds}
+                                            keepMounted
+                                            open={Boolean(anchorElds)}
+                                            onClose={handleClosedis}
+                                        >
+
+                                            {
+                                                districts ? districts.map((district, index) => (
+                                                    <MenuItem key={index} onClick={() => {
+                                                        handleClosedis();
+                                                        setDistrictId(district.district_id);
+                                                        setSelectedDis(district.district_name);
+                                                        localStorage.setItem("rdname", district.district_name);
+
+                                                    }}>{district.district_name}</MenuItem>
+                                                )) : <MenuItem>Select a state</MenuItem>
+                                            }
+                                        </Menu>
+                                    </div>
+
+                                </Box>
+
+
+                            }
+
+
+
+
+                        </Box>
+
+
+
+                        <Button onClick={() => OnSearchHandler(districtId)} size="large" className={classes.searchButton} variant="outlined" color="secondary">
+                            Search
+                        </Button>
+
+
+                        <Box className={classes.filternames} display="flex" justifyContent="center">
+                            <Box mx={.5}>
+                                <Button onClick={()=>setCenters(coviFilter)} size="small" variant="outlined" color="primary">
+                                    Covishield
+                                </Button>
+                            </Box>
+
+                            <Box mx={.5}>
+                                <Button onClick={()=>setCenters(covacFilter)}  size="small" variant="outlined" color="primary">
+                                    Covaxin
+                                </Button>
+                            </Box>
+                            <Box mx={.5} >
+                                <Button onClick={()=>setCenters(sputFilter)}  size="small" variant="outlined" color="primary">
+                                    Sputnik V
+                                </Button>
+                            </Box>
+
+
+                        </Box>
+
+                    </Paper>
+
+
+
+
 
 
                 </Grid>
-            </Container>
+
+
+
+                {
+                    centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
+                        <Paper elevation={0} className={classes.centersPaper}>
+                            {<Centers centers={centers} />}
+                        </Paper>
+                    </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
+                }
+
+
+            </Grid>
+        </Container>
     )
 }
 
