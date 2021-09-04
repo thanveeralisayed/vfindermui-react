@@ -44,7 +44,9 @@ const Centers = ({ centers, HospitalArray,filterHospital }) => {
                     />
                 </Box>
 
-                <Typography  className={classes.centersHeading} color="textSecondary" variant="h5" >Centers</Typography>
+                <Typography  className={classes.centersHeading} color="textSecondary" variant="h6" >Centers</Typography>
+
+                <Typography>{`${centers.length} ${centers.length > 1? 'centers':'center'} has found`}</Typography>
 
                 <Box mt={5}>
 

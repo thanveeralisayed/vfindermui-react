@@ -105,7 +105,7 @@ const Home = () => {
     const [covacFilter, setCovacFilter] = useState(null);
     const [sputFilter, setSputFilter] = useState(null);
     const [HospitalArray, setHospitalArray] = useState([]);
-    const [hfilterArray, setHfilterArray] = useState(null);
+    const [backArray, setBackArray] = useState(null);
 
 
 
@@ -126,11 +126,10 @@ const Home = () => {
         console.log(id);
         if (id !== 'reset') {
             const ncenters = centers ? centers.filter((center) => (center.center_id === id)) : '';
-            setHfilterArray(ncenters);
-            console.log(ncenters);
+            setCenters(ncenters);
         }
         if (id === 'reset') {
-            setHfilterArray(null);
+            setCenters(backArray);
         }
 
         // eslint-disable-next-line no-unused-expressions
@@ -234,6 +233,7 @@ const Home = () => {
             setCenters(res.data.centers);
             filterCentreVaccines(res.data.centers);
             searchCentersByname(res.data.centers);
+            setBackArray(res.data.centers);
         })
     }
 
@@ -245,6 +245,7 @@ const Home = () => {
             setCenters(res.data.centers);
             filterCentreVaccines(res.data.centers);
             searchCentersByname(res.data.centers);
+            setBackArray(res.data.centers);
         })
     }
 
@@ -426,19 +427,37 @@ const Home = () => {
 
 
                         <Box className={classes.filternames} display="flex" justifyContent="center">
-                            <Box mx={.5}>
-                                <Button onClick={() => setCenters(coviFilter)} size="small" variant="outlined" color="primary">
+
+                            <Box mx={.2}>
+                                <Button onClick={() => {
+                                    setCenters(backArray);
+                                    searchCentersByname(backArray);
+                                }} size="small" variant="outlined" color="primary">
+                                    All
+                                </Button>
+                            </Box>
+                            <Box mx={.2}>
+                                <Button onClick={() => {
+                                    setCenters(coviFilter);
+                                    searchCentersByname(coviFilter);
+                                }} size="small" variant="outlined" color="primary">
                                     Covishield
                                 </Button>
                             </Box>
 
-                            <Box mx={.5}>
-                                <Button onClick={() => setCenters(covacFilter)} size="small" variant="outlined" color="primary">
+                            <Box mx={.2}>
+                                <Button onClick={() => {
+                                    setCenters(covacFilter);
+                                    searchCentersByname(covacFilter);
+                                }} size="small" variant="outlined" color="primary">
                                     Covaxin
                                 </Button>
                             </Box>
-                            <Box mx={.5} >
-                                <Button onClick={() => setCenters(sputFilter)} size="small" variant="outlined" color="primary">
+                            <Box mx={.2} >
+                                <Button onClick={() => {
+                                    setCenters(sputFilter);
+                                    searchCentersByname(sputFilter);
+                                }} size="small" variant="outlined" color="primary">
                                     Sputnik V
                                 </Button>
                             </Box>
@@ -455,16 +474,16 @@ const Home = () => {
 
                 </Grid>
 
-             
-                        {
-                            centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
-                                <Paper elevation={0} className={classes.centersPaper}>
-                                    {<Centers filterHospital={filterHospital} HospitalArray={HospitalArray}
-                                     centers={hfilterArray !== null? hfilterArray:centers} />}
-                                </Paper>
-                            </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
-                        }
-                 
+
+                {
+                    centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
+                        <Paper elevation={0} className={classes.centersPaper}>
+                            {<Centers filterHospital={filterHospital} HospitalArray={HospitalArray}
+                                centers={centers} />}
+                        </Paper>
+                    </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
+                }
+
 
 
 
