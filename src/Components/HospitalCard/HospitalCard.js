@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import { Avatar, Button, ButtonGroup, CardActions, CardContent, CardHeader, Collapse, Grid, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
-import { yellow,green } from '@material-ui/core/colors';
+import { yellow, green } from '@material-ui/core/colors';
 import { ExpandMoreOutlined } from '@material-ui/icons';
 import { useState } from 'react';
 import clsx from 'clsx';
@@ -39,12 +39,12 @@ const useStyles = makeStyles((theme) => ({
     gitem: {
         marginLeft: theme.spacing(1)
     },
-    vaccinefee:{
-        fontSize:13
+    vaccinefee: {
+        fontSize: 13
     }
 }))
 
-const HospitalCard = ({ center }) => {
+const HospitalCard = ({ center}) => {
     const [expanded, setExpanded] = useState(false)
     const feeType = center.fee_type;
     const sessions = center.sessions;
@@ -53,7 +53,7 @@ const HospitalCard = ({ center }) => {
     const futureSessions = sessions.filter(session => (session.date !== todaydate));
     const vaccinefees = center.vaccine_fees;
 
-    
+  
 
 
     const handleExpandClick = () => {
@@ -74,33 +74,33 @@ const HospitalCard = ({ center }) => {
 
                 <CardContent >
 
-                    
-                        <Grid container>
+
+                    <Grid container>
+                        {
+                            vaccinefees ? vaccinefees.map((vaccine, index) => (
+                                <Grid key={index} item className={classes.gitem}>
+                                    <Typography className={classes.vaccinefee} color="textSecondary">{`${vaccine.vaccine} : ₹${vaccine.fee} `}</Typography>
+                                </Grid>
+                            )) : ''
+                        }
+
+                    </Grid>
+
+
                     {
-                        vaccinefees ? vaccinefees.map((vaccine, index) => (
-                            <Grid key={index} item className={classes.gitem}>
-                                <Typography className={classes.vaccinefee} color="textSecondary">{`${vaccine.vaccine} : ₹${vaccine.fee} `}</Typography>
-                            </Grid>
-                        )) : ''
+                        todaySessions.length > 0 ? todaySessions.map((session, index) => (<SessionCard key={index} date={todaydate} session={session} />)) : 'No more Sessions today'
                     }
-
-                        </Grid>
-
-
-                {
-                    todaySessions.length > 0 ? todaySessions.map((session, index) => (<SessionCard key={index} date={todaydate} session={session} />)) : 'No more Sessions today'
-                }
                 </CardContent>
 
-            {
+                {
 
-                futureSessions.length > 0 ?
-                    <div>
-                        <CardContent >
-                            <Typography className={classes.expandnotice} paragraph>Expand for Next 7 days availablity</Typography>
-                        </CardContent>
+                    futureSessions.length > 0 ?
+                        <div>
+                            <CardContent >
+                                <Typography className={classes.expandnotice} paragraph>Expand for Next 7 days availablity</Typography>
+                            </CardContent>
 
-                        {/* <CardActions disableSpacing>
+                            {/* <CardActions disableSpacing>
                             <IconButton
                                 className={clsx(classes.expand, {
                                     [classes.expandOpen]: expanded,
@@ -112,40 +112,40 @@ const HospitalCard = ({ center }) => {
                                 <ExpandMoreOutlined />
                             </IconButton>
                         </CardActions> */}
-                        <Collapse in={expanded} timeout="auto" unmountOnExit>
-                            <CardContent>
-                                <Typography paragraph>Next 7 Days</Typography>
+                            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                                <CardContent>
+                                    <Typography paragraph>Next 7 Days</Typography>
 
 
-                                <div>
-                                    {
-                                        futureSessions.length > 0 ?
-                                            futureSessions.map((session, index) => (
-                                                <Box key={index} className={classes.box} borderRadius={16} border={1} borderColor="grey.500"><SessionCard  date={session.date} session={session} /></Box>)) :
-                                            'No sesssions for Next 7 days'
-                                    }
+                                    <div>
+                                        {
+                                            futureSessions.length > 0 ?
+                                                futureSessions.map((session, index) => (
+                                                    <Box key={index} className={classes.box} borderRadius={16} border={1} borderColor="grey.500"><SessionCard date={session.date} session={session} /></Box>)) :
+                                                'No sesssions for Next 7 days'
+                                        }
 
-                                </div>
+                                    </div>
 
-                            </CardContent>
-                        </Collapse>
-                        <CardActions disableSpacing>
-                            <IconButton
-                                className={clsx(classes.expand, {
-                                    [classes.expandOpen]: expanded,
-                                })}
-                                onClick={handleExpandClick}
-                                aria-expanded={expanded}
-                                aria-label="show more"
-                            >
-                                <ExpandMoreOutlined />
-                            </IconButton>
-                        </CardActions>
-                    </div>
+                                </CardContent>
+                            </Collapse>
+                            <CardActions disableSpacing>
+                                <IconButton
+                                    className={clsx(classes.expand, {
+                                        [classes.expandOpen]: expanded,
+                                    })}
+                                    onClick={handleExpandClick}
+                                    aria-expanded={expanded}
+                                    aria-label="show more"
+                                >
+                                    <ExpandMoreOutlined />
+                                </IconButton>
+                            </CardActions>
+                        </div>
 
-                    : ''
+                        : ''
 
-            }
+                }
 
 
 

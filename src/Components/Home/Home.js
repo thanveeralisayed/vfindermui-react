@@ -104,6 +104,38 @@ const Home = () => {
     const [coviFilter, setcoviFilter] = useState(null);
     const [covacFilter, setCovacFilter] = useState(null);
     const [sputFilter, setSputFilter] = useState(null);
+    const [HospitalArray, setHospitalArray] = useState([]);
+    const [hfilterArray, setHfilterArray] = useState(null);
+
+
+
+    const searchCentersByname = (centersArray) => {
+        let cents = []
+        centersArray.map((center) => {
+            const object = {
+                id: center.center_id,
+                title: `${center.name}, ${center.address}`
+            }
+            cents.push(object);
+            return cents;
+        })
+        setHospitalArray(cents);
+    }
+
+    const filterHospital = (id) => {
+        console.log(id);
+        if (id !== 'reset') {
+            const ncenters = centers ? centers.filter((center) => (center.center_id === id)) : '';
+            setHfilterArray(ncenters);
+            console.log(ncenters);
+        }
+        if (id === 'reset') {
+            setHfilterArray(null);
+        }
+
+        // eslint-disable-next-line no-unused-expressions
+        // ncenters !== ''? setCenters(ncenters):null;
+    }
 
 
 
@@ -159,11 +191,7 @@ const Home = () => {
     }
 
 
-    useEffect(() => {
-        console.log(coviFilter);
-        console.log(covacFilter);
-        console.log(sputFilter);
-    }, [sputFilter])
+
 
 
 
@@ -205,6 +233,7 @@ const Home = () => {
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pin}&date=${date}`).then(res => {
             setCenters(res.data.centers);
             filterCentreVaccines(res.data.centers);
+            searchCentersByname(res.data.centers);
         })
     }
 
@@ -215,6 +244,7 @@ const Home = () => {
         axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${id}&date=${date}`).then((res) => {
             setCenters(res.data.centers);
             filterCentreVaccines(res.data.centers);
+            searchCentersByname(res.data.centers);
         })
     }
 
@@ -397,18 +427,18 @@ const Home = () => {
 
                         <Box className={classes.filternames} display="flex" justifyContent="center">
                             <Box mx={.5}>
-                                <Button onClick={()=>setCenters(coviFilter)} size="small" variant="outlined" color="primary">
+                                <Button onClick={() => setCenters(coviFilter)} size="small" variant="outlined" color="primary">
                                     Covishield
                                 </Button>
                             </Box>
 
                             <Box mx={.5}>
-                                <Button onClick={()=>setCenters(covacFilter)}  size="small" variant="outlined" color="primary">
+                                <Button onClick={() => setCenters(covacFilter)} size="small" variant="outlined" color="primary">
                                     Covaxin
                                 </Button>
                             </Box>
                             <Box mx={.5} >
-                                <Button onClick={()=>setCenters(sputFilter)}  size="small" variant="outlined" color="primary">
+                                <Button onClick={() => setCenters(sputFilter)} size="small" variant="outlined" color="primary">
                                     Sputnik V
                                 </Button>
                             </Box>
@@ -425,15 +455,17 @@ const Home = () => {
 
                 </Grid>
 
+             
+                        {
+                            centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
+                                <Paper elevation={0} className={classes.centersPaper}>
+                                    {<Centers filterHospital={filterHospital} HospitalArray={HospitalArray}
+                                     centers={hfilterArray !== null? hfilterArray:centers} />}
+                                </Paper>
+                            </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
+                        }
+                 
 
-
-                {
-                    centers !== null ? centers.length > 0 ? <Grid className={classes.centersGrid} item xs={12}>
-                        <Paper elevation={0} className={classes.centersPaper}>
-                            {<Centers centers={centers} />}
-                        </Paper>
-                    </Grid> : <Typography color="textPrimary" className={classes.notfound}>Sorry, No centers found </Typography> : null
-                }
 
 
             </Grid>
