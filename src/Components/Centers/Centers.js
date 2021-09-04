@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import HospitalCard from '../HospitalCard/HospitalCard';
-import { motion } from 'framer-motion';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Box } from '@material-ui/core';
@@ -27,9 +26,7 @@ const Centers = ({ centers, HospitalArray,filterHospital }) => {
 
     const classes = useStyles();
     return (
-        <motion.div initial={{ y: "100" }}
-            animate={{ y: 0 }}
-            exit={{ y: "100" }} >
+        <div>
 
             <Box>
                 
@@ -69,7 +66,7 @@ const Centers = ({ centers, HospitalArray,filterHospital }) => {
 
 
 
-        </motion.div>
+        </div>
 
     )
 }
