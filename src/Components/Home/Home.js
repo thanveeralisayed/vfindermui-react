@@ -347,7 +347,7 @@ const Home = () => {
                                         onChange={(e) => {
                                             setPincode(e.target.value)
                                         }}
-                                        placeholder="Enter your PIN}"
+                                        placeholder="Enter your PIN"
                                         value={pincode}
                                         classes={{
                                             root: classes.inputRoot,
