@@ -1,4 +1,4 @@
-import React, { useEffect,useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import { Avatar, Button, ButtonGroup, CardActions, CardContent, CardHeader, Collapse, Grid, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
@@ -54,26 +54,26 @@ const HospitalCard = ({ center }) => {
     const todaySessions = sessions.filter(session => (session.date === todaydate));
     const futureSessions = sessions.filter(session => (session.date !== todaydate));
     const vaccinefees = center.vaccine_fees;
-    
 
 
-   
 
-  
 
-   
+
+
+
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
     useEffect(() => {
-       const width = window.innerWidth;
-       setSwidth(width);
+        const width = window.innerWidth;
+        setSwidth(width);
     }, [])
 
-    
-  
+
+
 
     const classes = useStyles();
     return (
@@ -104,31 +104,45 @@ const HospitalCard = ({ center }) => {
 
                     </Grid>
 
-                    <Box display="flex" flexWrap="wrap" >
-                        
-                        {
-                            todaySessions.length > 0 ? todaySessions.map((session, index) => (
-                                <Box mx={.2} my={.2} ><SessionCard key={index} date={todaydate} session={session} />
-                                </Box>)) : 'No more Sessions today'
-                        }
-                      
+                    {
+                        swidth > 599 ? <Box display="flex" flexWrap="wrap" >
 
-                      
-                       
-                       
-                        {
-                            swidth > 599? futureSessions.length > 0 ?
-                                futureSessions.map((session, index) => (
-                                    <Box mx={.2} my={.2} key={index}  ><SessionCard date={session.date} session={session} />
-                                    </Box>)) :
-                                'No sesssions for Next 7 days':''
-                        }
 
-                    
+                            {
+                                todaySessions.length > 0 ? todaySessions.map((session, index) => (
+                                    <Box mx={.2} my={.2} ><SessionCard key={index} date={todaydate} session={session} />
+                                    </Box>)) : 'No more Sessions today'
+                            }
 
-                    </Box>
 
-                   
+
+
+
+                            {
+                                futureSessions.length > 0 ?
+                                    futureSessions.map((session, index) => (
+                                        <Box mx={.2} my={.2} key={index}  ><SessionCard date={session.date} session={session} />
+                                        </Box>)) :
+                                    'No sesssions for Next 7 days'
+                            }
+
+
+
+                        </Box> : <Box display="flex" justifyContent="center" flexWrap="wrap">
+
+                            {
+                                todaySessions.length > 0 ? todaySessions.map((session, index) => (
+                                    <Box mx={.2} my={.2} ><SessionCard key={index} date={todaydate} session={session} />
+                                    </Box>)) : 'No more Sessions today'
+                            }
+
+
+                        </Box>
+
+
+                    }
+
+
 
 
                 </CardContent>

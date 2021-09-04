@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     },
     searchButton: {
         marginTop: theme.spacing(5),
-        padding: theme.spacing(1, 6)
+        padding: theme.spacing(1, 6),
     },
     centersGrid: {
         marginTop: theme.spacing(2),
@@ -86,6 +86,9 @@ const useStyles = makeStyles((theme) => ({
     },
     filternames: {
         marginTop: theme.spacing(2)
+    },
+    vacbtn:{
+        fontSize:10
     }
 }))
 
@@ -426,13 +429,13 @@ const Home = () => {
                         </Button>
 
 
-                        <Box className={classes.filternames} display="flex" justifyContent="center">
+                        <Box className={classes.filternames} display="flex" justifyContent="center" flexWrap="wrap" >
 
-                            <Box mx={.2}>
+                            <Box  mx={.2}>
                                 <Button onClick={() => {
                                     setCenters(backArray);
                                     searchCentersByname(backArray);
-                                }} size="small" variant="outlined" color="primary">
+                                }} className={classes.vacbtn} variant="outlined" color="primary">
                                     All
                                 </Button>
                             </Box>
@@ -440,7 +443,7 @@ const Home = () => {
                                 <Button onClick={() => {
                                     setCenters(coviFilter);
                                     searchCentersByname(coviFilter);
-                                }} size="small" variant="outlined" color="primary">
+                                }} className={classes.vacbtn}variant="outlined" color="primary">
                                     Covishield
                                 </Button>
                             </Box>
@@ -449,15 +452,15 @@ const Home = () => {
                                 <Button onClick={() => {
                                     setCenters(covacFilter);
                                     searchCentersByname(covacFilter);
-                                }} size="small" variant="outlined" color="primary">
+                                }} className={classes.vacbtn} variant="outlined" color="primary">
                                     Covaxin
                                 </Button>
                             </Box>
-                            <Box mx={.2} >
+                            <Box mt={.5} mx={.2} >
                                 <Button onClick={() => {
                                     setCenters(sputFilter);
                                     searchCentersByname(sputFilter);
-                                }} size="small" variant="outlined" color="primary">
+                                }} className={classes.vacbtn}variant="outlined" color="primary">
                                     Sputnik V
                                 </Button>
                             </Box>
