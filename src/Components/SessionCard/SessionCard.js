@@ -4,14 +4,15 @@ import React from 'react'
 const useStyles = makeStyles((theme) => ({
     agecap: {
         textAlign: 'center',
-        marginTop: theme.spacing(2)
+        marginTop: theme.spacing(2),
+        fontSize:'2vh'
     },
     dosebtngp: {
         display: 'flex',
         justifyContent: 'center'
     },
     vaccinename:{
-        fontSize:13,
+        fontSize:'2vh',
         textAlign:'center'
     }
 }))

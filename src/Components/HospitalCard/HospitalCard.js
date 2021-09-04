@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useLayoutEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import { Avatar, Button, ButtonGroup, CardActions, CardContent, CardHeader, Collapse, Grid, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
@@ -9,6 +9,7 @@ import clsx from 'clsx';
 import SessionCard from '../SessionCard/SessionCard';
 import format from 'date-fns/format/index';
 import Box from '@material-ui/core/Box';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,25 +45,42 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const HospitalCard = ({ center}) => {
-    const [expanded, setExpanded] = useState(false)
+const HospitalCard = ({ center }) => {
+    const [expanded, setExpanded] = useState(false);
+    const [swidth, setSwidth] = useState(0);
     const feeType = center.fee_type;
     const sessions = center.sessions;
     const todaydate = format(new Date(), 'dd-MM-yyyy');
     const todaySessions = sessions.filter(session => (session.date === todaydate));
     const futureSessions = sessions.filter(session => (session.date !== todaydate));
     const vaccinefees = center.vaccine_fees;
+    
+
+
+   
 
   
 
+   
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
+    useEffect(() => {
+       const width = window.innerWidth;
+       setSwidth(width);
+    }, [])
+
+    
+  
+
     const classes = useStyles();
     return (
-        <div>
+        <div style={{
+            height: "100%",
+            paddingTop: 5
+        }}>
             <Card className={classes.card} elevation={7}>
                 <CardHeader
                     avatar={<Avatar aria-label="centers" style={feeType === "Paid" ? { backgroundColor: `${yellow[500]}` } : { backgroundColor: `${green[500]}` }}>
@@ -86,21 +104,44 @@ const HospitalCard = ({ center}) => {
 
                     </Grid>
 
+                    <Box display="flex" flexWrap="wrap" >
+                        
+                        {
+                            todaySessions.length > 0 ? todaySessions.map((session, index) => (
+                                <Box mx={.2} my={.2} ><SessionCard key={index} date={todaydate} session={session} />
+                                </Box>)) : 'No more Sessions today'
+                        }
+                      
 
-                    {
-                        todaySessions.length > 0 ? todaySessions.map((session, index) => (<SessionCard key={index} date={todaydate} session={session} />)) : 'No more Sessions today'
-                    }
+                      
+                       
+                       
+                        {
+                            swidth > 599? futureSessions.length > 0 ?
+                                futureSessions.map((session, index) => (
+                                    <Box mx={.2} my={.2} key={index}  ><SessionCard date={session.date} session={session} />
+                                    </Box>)) :
+                                'No sesssions for Next 7 days':''
+                        }
+
+                    
+
+                    </Box>
+
+                   
+
+
                 </CardContent>
 
                 {
+                    swidth < 600 ?
+                        futureSessions.length > 0 ?
+                            <div>
+                                <CardContent >
+                                    <Typography className={classes.expandnotice} paragraph>Expand for Next 7 days availablity</Typography>
+                                </CardContent>
 
-                    futureSessions.length > 0 ?
-                        <div>
-                            <CardContent >
-                                <Typography className={classes.expandnotice} paragraph>Expand for Next 7 days availablity</Typography>
-                            </CardContent>
-
-                            {/* <CardActions disableSpacing>
+                                {/* <CardActions disableSpacing>
                             <IconButton
                                 className={clsx(classes.expand, {
                                     [classes.expandOpen]: expanded,
@@ -112,38 +153,39 @@ const HospitalCard = ({ center}) => {
                                 <ExpandMoreOutlined />
                             </IconButton>
                         </CardActions> */}
-                            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                                <CardContent>
-                                    <Typography paragraph>Next 7 Days</Typography>
+                                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                                    <CardContent>
+                                        <Typography paragraph>Next 7 Days</Typography>
 
 
-                                    <div>
-                                        {
-                                            futureSessions.length > 0 ?
-                                                futureSessions.map((session, index) => (
-                                                    <Box key={index} className={classes.box} borderRadius={16} border={1} borderColor="grey.500"><SessionCard date={session.date} session={session} /></Box>)) :
-                                                'No sesssions for Next 7 days'
-                                        }
+                                        <Box display="flex" justifyContent="center" flexWrap="wrap">
+                                            {
+                                                futureSessions.length > 0 ?
+                                                    futureSessions.map((session, index) => (
+                                                        <Box mx={.2} my={.2} key={index} className={classes.box} borderRadius={16} border={1} borderColor="grey.500"><SessionCard date={session.date} session={session} />
+                                                        </Box>)) :
+                                                    'No sesssions for Next 7 days'
+                                            }
 
-                                    </div>
+                                        </Box>
 
-                                </CardContent>
-                            </Collapse>
-                            <CardActions disableSpacing>
-                                <IconButton
-                                    className={clsx(classes.expand, {
-                                        [classes.expandOpen]: expanded,
-                                    })}
-                                    onClick={handleExpandClick}
-                                    aria-expanded={expanded}
-                                    aria-label="show more"
-                                >
-                                    <ExpandMoreOutlined />
-                                </IconButton>
-                            </CardActions>
-                        </div>
+                                    </CardContent>
+                                </Collapse>
+                                <CardActions disableSpacing>
+                                    <IconButton
+                                        className={clsx(classes.expand, {
+                                            [classes.expandOpen]: expanded,
+                                        })}
+                                        onClick={handleExpandClick}
+                                        aria-expanded={expanded}
+                                        aria-label="show more"
+                                    >
+                                        <ExpandMoreOutlined />
+                                    </IconButton>
+                                </CardActions>
+                            </div>
 
-                        : ''
+                            : '' : ''
 
                 }
 

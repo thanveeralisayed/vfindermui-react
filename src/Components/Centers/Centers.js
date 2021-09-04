@@ -50,7 +50,7 @@ const Centers = ({ centers, HospitalArray,filterHospital }) => {
                     <Grid className={classes.gridcenters} container>
                         {
                             centers.map((center, index) => (
-                                <Grid key={index} item md={3} xs={12} sm={6} >
+                                <Grid key={index} item md={12} xs={12} sm={6} >
                                     <HospitalCard center={center} />
                                 </Grid>
                             ))
