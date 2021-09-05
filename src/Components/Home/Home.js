@@ -436,7 +436,7 @@ const Home = () => {
                                 <Button onClick={() => {
                                     setCenters(backArray);
                                     searchCentersByname(backArray);
-                                }} className={classes.vacbtn} variant="outlined" color="primary">
+                                }} className={classes.vacbtn} variant="contained" color="secondary">
                                     All
                                 </Button>
                             </Box>
@@ -444,7 +444,7 @@ const Home = () => {
                                 <Button onClick={() => {
                                     setCenters(coviFilter);
                                     searchCentersByname(coviFilter);
-                                }} className={classes.vacbtn}variant="outlined" color="primary">
+                                }} className={classes.vacbtn}variant="contained" color="secondary">
                                     Covishield
                                 </Button>
                             </Box>
@@ -453,7 +453,7 @@ const Home = () => {
                                 <Button onClick={() => {
                                     setCenters(covacFilter);
                                     searchCentersByname(covacFilter);
-                                }} className={classes.vacbtn} variant="outlined" color="primary">
+                                }} className={classes.vacbtn} variant="contained" color="secondary">
                                     Covaxin
                                 </Button>
                             </Box>
@@ -461,7 +461,7 @@ const Home = () => {
                                 <Button onClick={() => {
                                     setCenters(sputFilter);
                                     searchCentersByname(sputFilter);
-                                }} className={classes.vacbtn}variant="outlined" color="primary">
+                                }} className={classes.vacbtn}variant="contained" color="secondary">
                                     Sputnik V
                                 </Button>
                             </Box>

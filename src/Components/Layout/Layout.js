@@ -15,7 +15,7 @@ import FlareOutlinedIcon from '@material-ui/icons/FlareOutlined';
 const Layout = ({ children }) => {
     const [darkState, setDarkState] = useState(false);
     const palletType = darkState ? "dark" : "light";
-    const mainPrimaryColor = darkState ? blue[500] : red[900];
+    const mainPrimaryColor = darkState ? blue[500] : blue[900];
     const mainSecondaryColor = darkState ? red[100] : red[500];
     const darkTheme = createTheme({
         palette: {
@@ -58,6 +58,9 @@ const Layout = ({ children }) => {
         },
         title: {
             flexGrow: 1,
+        },
+        nighttoggle:{
+            cursor:'pointer'
         }
     }));
 
@@ -79,8 +82,8 @@ const Layout = ({ children }) => {
                                 </Typography>
                                 {/* <Button color="inherit">Login</Button> */}
                                 {
-                                    !darkState ? <Brightness4OutlinedIcon onClick={() => handleThemeChange()} /> :
-                                        <FlareOutlinedIcon onClick={() => handleThemeChange()} />
+                                    !darkState ? <Brightness4OutlinedIcon className={classes.nighttoggle} onClick={() => handleThemeChange()} /> :
+                                        <FlareOutlinedIcon className={classes.nighttoggle} onClick={() => handleThemeChange()} />
                                 }
                             </Toolbar>
                         </AppBar>
