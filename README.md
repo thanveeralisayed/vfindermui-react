@@ -1,4 +1,6 @@
-This Project is Hosted at heroku in the address : http://vfinder.herokuapp.com/
+
+Netlify Hosted Link: https://vfinder.netlify.app/
+Heroku Hosted Link: http://vfinder.herokuapp.com/
 
     
 
