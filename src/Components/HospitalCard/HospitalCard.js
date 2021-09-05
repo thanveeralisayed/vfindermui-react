@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect} from 'react';
 import Card from '@material-ui/core/Card';
-import { Avatar, Button, ButtonGroup, CardActions, CardContent, CardHeader, Collapse, Grid, IconButton, Typography } from '@material-ui/core';
+import { Avatar, CardActions, CardContent, CardHeader, Collapse, Grid, IconButton, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import { yellow, green } from '@material-ui/core/colors';
 import { ExpandMoreOutlined } from '@material-ui/icons';
@@ -110,7 +110,7 @@ const HospitalCard = ({ center }) => {
 
                             {
                                 todaySessions.length > 0 ? todaySessions.map((session, index) => (
-                                    <Box mx={.2} my={.2} ><SessionCard key={index} date={todaydate} session={session} />
+                                    <Box key={index} mx={.2} my={.2} ><SessionCard date={todaydate} session={session} />
                                     </Box>)) : 'No more Sessions today'
                             }
 
@@ -132,7 +132,7 @@ const HospitalCard = ({ center }) => {
 
                             {
                                 todaySessions.length > 0 ? todaySessions.map((session, index) => (
-                                    <Box mx={.2} my={.2} ><SessionCard key={index} date={todaydate} session={session} />
+                                    <Box key={index} mx={.2} my={.2} ><SessionCard date={todaydate} session={session} />
                                     </Box>)) : 'No more Sessions today'
                             }
 

@@ -167,7 +167,7 @@ const Home = () => {
         let sput = [];
 
 
-        centerss.map((center) => {
+        centerss.map((center) => (
             center.sessions.map((session) => {
                 if (session.vaccine === 'COVISHIELD') {
                     covi.push(center);
@@ -178,8 +178,9 @@ const Home = () => {
                 if (session.vaccine === 'SPUTNIK V') {
                     sput.push(center)
                 }
+                return session;
             })
-        })
+        ))
 
 
         covi = getUnique(covi);
@@ -254,34 +255,34 @@ const Home = () => {
 
     useEffect(() => {
         fetchStates();
-        if (localStorage.getItem("recentpin")) {
-            const rpin = localStorage.getItem("recentpin");
-            const date = format(new Date(), 'dd-MM-yyyy')
-            if (rpin) {
-                fetchCentreList(rpin, date);
-                setPincode(rpin);
-            }
-        }
+        // if (localStorage.getItem("recentpin")) {
+        //     const rpin = localStorage.getItem("recentpin");
+        //     const date = format(new Date(), 'dd-MM-yyyy')
+        //     if (rpin) {
+        //         fetchCentreList(rpin, date);
+        //         setPincode(rpin);
+        //     }
+        // }
 
-        if (localStorage.getItem("rdistrict")) {
-            const rdis = localStorage.getItem("rdistrict");
-            let tabval = localStorage.getItem("tabval");
-            tabval = parseInt(tabval);
-            setValue(tabval);
-            const date = format(new Date(), 'dd-MM-yyyy');
-            if (rdis) {
-                fetchCentreListbyDistrict(rdis, date);
-                const rsname = localStorage.getItem("rsname");
-                const rdname = localStorage.getItem("rdname");
-                const seldisid = localStorage.getItem("seldisId");
-                console.log(rsname);
-                if (rsname && rdname) {
-                    setSelectedSt(rsname);
-                    setSelectedDis(rdname);
-                    fetchDistricts(seldisid);
-                }
-            }
-        }
+        // if (localStorage.getItem("rdistrict")) {
+        //     const rdis = localStorage.getItem("rdistrict");
+        //     let tabval = localStorage.getItem("tabval");
+        //     tabval = parseInt(tabval);
+        //     setValue(tabval);
+        //     const date = format(new Date(), 'dd-MM-yyyy');
+        //     if (rdis) {
+        //         fetchCentreListbyDistrict(rdis, date);
+        //         const rsname = localStorage.getItem("rsname");
+        //         const rdname = localStorage.getItem("rdname");
+        //         const seldisid = localStorage.getItem("seldisId");
+        //         console.log(rsname);
+        //         if (rsname && rdname) {
+        //             setSelectedSt(rsname);
+        //             setSelectedDis(rdname);
+        //             fetchDistricts(seldisid);
+        //         }
+        //     }
+        // }
     }, [])
 
 
@@ -431,7 +432,7 @@ const Home = () => {
 
                         <Box className={classes.filternames} display="flex" justifyContent="center" flexWrap="wrap" >
 
-                            <Box  mx={.2}>
+                            <Box mt={.5} mx={.2}>
                                 <Button onClick={() => {
                                     setCenters(backArray);
                                     searchCentersByname(backArray);
@@ -439,7 +440,7 @@ const Home = () => {
                                     All
                                 </Button>
                             </Box>
-                            <Box mx={.2}>
+                            <Box mt={.5}  mx={.2}>
                                 <Button onClick={() => {
                                     setCenters(coviFilter);
                                     searchCentersByname(coviFilter);
@@ -448,7 +449,7 @@ const Home = () => {
                                 </Button>
                             </Box>
 
-                            <Box mx={.2}>
+                            <Box mt={.5}  mx={.2}>
                                 <Button onClick={() => {
                                     setCenters(covacFilter);
                                     searchCentersByname(covacFilter);
