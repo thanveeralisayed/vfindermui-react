@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -7,6 +7,9 @@ import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { blue, red } from '@material-ui/core/colors';
 import Brightness4OutlinedIcon from '@material-ui/icons/Brightness4Outlined';
 import FlareOutlinedIcon from '@material-ui/icons/FlareOutlined';
+import { Box, Chip} from '@material-ui/core';
+import { GitHub } from '@material-ui/icons';
+import { ExternalLink } from 'react-external-link';
 
 
 
@@ -25,28 +28,28 @@ const Layout = ({ children }) => {
             },
             secondary: {
                 main: mainSecondaryColor
-            }
+            },
         }
     });
 
     useEffect(() => {
         if (localStorage.getItem('darkmode')) {
-           const value = localStorage.getItem('darkmode');
-           console.log(value);
-           if (value === 'false') {
-               setDarkState(false);
-           }
-           if (value === 'true') {
-               setDarkState(true);
-           }
-          
+            const value = localStorage.getItem('darkmode');
+            console.log(value);
+            if (value === 'false') {
+                setDarkState(false);
+            }
+            if (value === 'true') {
+                setDarkState(true);
+            }
+
         }
     }, [])
 
     const handleThemeChange = () => {
         setDarkState(!darkState);
-        localStorage.setItem("darkmode",!darkState);
-        
+        localStorage.setItem("darkmode", !darkState);
+
     };
 
     const useStyles = makeStyles((theme) => ({
@@ -59,8 +62,12 @@ const Layout = ({ children }) => {
         title: {
             flexGrow: 1,
         },
-        nighttoggle:{
-            cursor:'pointer'
+        nighttoggle: {
+            cursor: 'pointer'
+        },
+        gitlink:{
+            color:'white',
+            textDecoration:'none'
         }
     }));
 
@@ -72,7 +79,7 @@ const Layout = ({ children }) => {
             <div>
                 <div>
                     <div className={classes.root}>
-                        <AppBar  position="static">
+                        <AppBar position="static">
                             <Toolbar>
                                 {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                                 <MenuIcon />
@@ -90,7 +97,18 @@ const Layout = ({ children }) => {
                     </div>
 
                     {children}
+
+
                 </div>
+                <Box mt={5} mb={2} position="relative" display="flex" justifyContent="center">
+                    <Chip
+                        icon={<GitHub />}
+                        label={<ExternalLink className={classes.gitlink} href="https://github.com/thanveeralisayed/vfindermui-react">vfindermui-react
+                        </ExternalLink>}
+                        color="secondary"
+                        variant="outlined"
+                    />
+                </Box>
             </div>
         </ThemeProvider>
 
